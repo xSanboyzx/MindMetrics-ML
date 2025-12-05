@@ -8,7 +8,7 @@
 
 ---
 
-## 📘 Project Overview
+## Project Overview
 
 MindMetrics-ML is a machine learning project that predicts an individual's **Quality of Life (QoL)** based on:
 
@@ -21,7 +21,7 @@ The trained model is deployed through a **Streamlit web app**, allowing users to
 
 ---
 
-## 🎯 Problem Statement
+## Problem Statement
 
 The rise of digital technologies has reshaped how individuals work, socialize, sleep, and cope with stress. Understanding how these behaviors influence mental health and overall wellbeing is challenging due to:
 
@@ -33,7 +33,7 @@ This project solves the problem using **machine learning**, allowing a neural ne
 
 ---
 
-## 🧠 Machine Learning Approach
+## Machine Learning Approach
 
 ### **Model Type:**  
 Multilayer Perceptron (MLP) regression model using PyTorch.
@@ -86,7 +86,7 @@ MindMetrics-ML/
 
 ---
 
-# 🚀 How to Run the Project
+# How to Run the Project
 
 ### **1️⃣ Clone the repository**
 ```bash
@@ -143,12 +143,12 @@ This will launch the app at:
 http://localhost:8501
 ```
 
-## 📝 License
+## License
 
 This project was developed for academic use as part of a Machine Learning course.
 You are free to modify and extend it.
 
-## 🙌 Acknowledgements
+## Acknowledgements
 
 - Dataset: Digital Lifestyle Benchmark (Kaggle)
 
