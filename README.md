@@ -63,29 +63,6 @@ Examples include:
 
 ---
 
-## 📂 Project Structure
-MindMetrics-ML/
-│
-├── data/
-│ └── raw/
-│ └── dataset.csv
-│
-├── notebooks/
-│ ├── 01_eda.ipynb
-│ └── 02_model_training.ipynb
-│
-├── deployment/
-│ ├── app.py
-│ └── model/
-│ ├── best_model.pt
-│ └── scaler.pkl
-│
-├── venv/ # Optional / local only
-├── requirements.txt
-└── README.md
-
----
-
 # How to Run the Project
 
 ### **1️⃣ Clone the repository**
