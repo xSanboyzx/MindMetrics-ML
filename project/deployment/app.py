@@ -172,10 +172,6 @@ if st.button("🔮 Predict Quality of Life"):
     # Interpretation block
     st.write("### Interpretation (rough)")
     st.write(
-        "- This score is on the same scale as the label you trained on "
-        "(e.g., a happiness or QoL score from your dataset)."
-    )
-    st.write(
         "Lower values may suggest lower self-reported wellbeing, higher values suggest higher wellbeing, "
         "but exact meaning depends on how the original scores were defined."
     )
