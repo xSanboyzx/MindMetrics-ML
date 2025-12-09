@@ -3,7 +3,6 @@ import numpy as np
 import streamlit as st
 import torch
 from torch import nn
-import joblib
 
 # ---------- CONFIG ----------
 
@@ -25,10 +24,10 @@ FEATURE_COLS = [
     "digital_dependence_score",
 ]
 
-SCALER_PATH = os.path.join("model", "scaler.pkl")
+SCALER_PARAMS_PATH = os.path.join("model", "scaler_params.npz")
 MODEL_PATH = os.path.join("model", "best_model.pt")
 
-# ---------- MODEL DEFINITION (must match training) ----------
+# ---------- MODEL DEFINITION & LOADING ----------
 
 class QoLRegressor(nn.Module):
     def __init__(self, input_dim: int):
@@ -48,18 +47,23 @@ class QoLRegressor(nn.Module):
 
 @st.cache_resource
 def load_artifacts():
-    # Load scaler
-    scaler = joblib.load(SCALER_PATH)
+    # Load scaler parameters (no sklearn needed)
+    params = np.load(SCALER_PARAMS_PATH)
+    mean = params["mean"]
+    scale = params["scale"]
 
-    # Build model with correct input dim
+    def scale_features(x: np.ndarray) -> np.ndarray:
+        # x: (batch, num_features)
+        return (x - mean) / scale
+
+    # Build and load model
     input_dim = len(FEATURE_COLS)
     model = QoLRegressor(input_dim)
     state_dict = torch.load(MODEL_PATH, map_location="cpu")
     model.load_state_dict(state_dict)
     model.eval()
 
-    return scaler, model
-
+    return scale_features, model
 
 # ---------- STREAMLIT UI ----------
 
@@ -78,7 +82,7 @@ st.write(
     "_Note: This is an academic project, not a medical or clinical tool._"
 )
 
-scaler, model = load_artifacts()
+scale_features, model = load_artifacts()
 
 st.header("1️⃣ Enter Lifestyle & Digital Behavior")
 
@@ -157,7 +161,7 @@ if st.button("🔮 Predict Quality of Life"):
     x = np.array(input_values, dtype=np.float32).reshape(1, -1)
 
     # Scale using training-time scaler
-    x_scaled = scaler.transform(x)
+    x_scaled = scale_features(x)
 
     # Convert to tensor and predict
     x_tensor = torch.tensor(x_scaled, dtype=torch.float32)
