@@ -104,3 +104,14 @@ data/interim/
 # OS-specific
 .DS_Store
 Thumbs.db
+
+# Showcase web build and captures
+node_modules/
+explorer/dist/
+.artifacts/
+!explorer/public/model.onnx
+setup_release.py
+
+
+.wrangler/
+

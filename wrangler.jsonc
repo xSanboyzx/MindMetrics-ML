@@ -1,0 +1,6 @@
+{
+  "name": "mindmetrics-explorer",
+  "compatibility_date": "2026-11-05",
+  "assets": { "directory": "./explorer/dist", "not_found_handling": "404-page" },
+  "workers_dev": true
+}
