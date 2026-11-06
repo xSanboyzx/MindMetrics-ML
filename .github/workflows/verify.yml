@@ -1,0 +1,52 @@
+name: Verify MindMetrics release
+on:
+  push:
+    branches: [main, showcase/model-explorer]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - run: python -m pip install --upgrade pip==26.3 setuptools==84.2.1
+      - run: pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install -r requirements.txt
+      - run: ruff check . && ruff format --check .
+      - run: pip check
+      - run: pip-audit --local
+      - run: pytest -q
+      - run: python -m tools.release
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: explorer/package-lock.json
+      - run: npm ci
+        working-directory: explorer
+      - run: npx prettier --check src tools vite.config.ts package.json tsconfig.json index.html
+        working-directory: explorer
+      - run: npm audit --audit-level=high
+        working-directory: explorer
+      - run: npm run build
+        working-directory: explorer
+      - run: npx playwright install --with-deps chromium
+        working-directory: explorer
+      - run: npm test
+        working-directory: explorer
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mindmetrics-web
+          path: explorer/dist
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-captures
+          path: .artifacts

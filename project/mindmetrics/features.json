@@ -1,0 +1,137 @@
+[
+  {
+    "key": "age",
+    "label": "Age",
+    "unit": "years",
+    "group": "Daily rhythm",
+    "decimals": 0,
+    "min": 13.0,
+    "max": 50.0
+  },
+  {
+    "key": "device_hours_per_day",
+    "label": "Device use",
+    "unit": "hours / day",
+    "group": "Digital habits",
+    "decimals": 2,
+    "min": 0.28,
+    "max": 17.16
+  },
+  {
+    "key": "phone_unlocks",
+    "label": "Phone unlocks",
+    "unit": "per day",
+    "group": "Digital habits",
+    "decimals": 0,
+    "min": 9.0,
+    "max": 374.0
+  },
+  {
+    "key": "notifications_per_day",
+    "label": "Notifications",
+    "unit": "per day",
+    "group": "Digital habits",
+    "decimals": 0,
+    "min": 22.0,
+    "max": 1211.0
+  },
+  {
+    "key": "social_media_mins",
+    "label": "Social media",
+    "unit": "minutes / day",
+    "group": "Digital habits",
+    "decimals": 0,
+    "min": 0.0,
+    "max": 631.0
+  },
+  {
+    "key": "study_mins",
+    "label": "Study / focused work",
+    "unit": "minutes / day",
+    "group": "Daily rhythm",
+    "decimals": 0,
+    "min": 0.0,
+    "max": 418.0
+  },
+  {
+    "key": "physical_activity_days",
+    "label": "Physical activity",
+    "unit": "days / week",
+    "group": "Daily rhythm",
+    "decimals": 0,
+    "min": 0.0,
+    "max": 7.0
+  },
+  {
+    "key": "sleep_hours",
+    "label": "Sleep duration",
+    "unit": "hours / night",
+    "group": "Daily rhythm",
+    "decimals": 2,
+    "min": 3.0,
+    "max": 11.00456608768657
+  },
+  {
+    "key": "sleep_quality",
+    "label": "Sleep quality",
+    "unit": "dataset scale: 1\u20135",
+    "group": "Self-reported scores",
+    "decimals": 2,
+    "min": 1.0,
+    "max": 5.0
+  },
+  {
+    "key": "anxiety_score",
+    "label": "Anxiety indicator",
+    "unit": "dataset score",
+    "group": "Self-reported scores",
+    "decimals": 2,
+    "min": 0.0,
+    "max": 27.154216664249446
+  },
+  {
+    "key": "depression_score",
+    "label": "Depression indicator",
+    "unit": "dataset score",
+    "group": "Self-reported scores",
+    "decimals": 2,
+    "min": 0.0,
+    "max": 27.0
+  },
+  {
+    "key": "stress_level",
+    "label": "Stress",
+    "unit": "dataset scale: 1\u201310",
+    "group": "Self-reported scores",
+    "decimals": 2,
+    "min": 1.0,
+    "max": 10.0
+  },
+  {
+    "key": "focus_score",
+    "label": "Focus",
+    "unit": "dataset scale: 0\u2013100",
+    "group": "Self-reported scores",
+    "decimals": 2,
+    "min": 0.0,
+    "max": 100.0
+  },
+  {
+    "key": "productivity_score",
+    "label": "Productivity",
+    "unit": "dataset score",
+    "group": "Self-reported scores",
+    "decimals": 0,
+    "min": 33.0,
+    "max": 95.0
+  },
+  {
+    "key": "digital_dependence_score",
+    "label": "Digital dependence",
+    "unit": "dataset score",
+    "group": "Self-reported scores",
+    "decimals": 2,
+    "min": 5.6,
+    "max": 89.2
+  }
+]

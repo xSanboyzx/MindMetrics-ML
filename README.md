@@ -1,134 +1,79 @@
-# 🌟 MindMetrics-ML  
-### Predicting Quality of Life Using Behavioral, Mental Health, and Digital Usage Data
+# MindMetrics-ML
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
-![PyTorch](https://img.shields.io/badge/PyTorch-MLP-orange.svg)
-![Streamlit](https://img.shields.io/badge/Streamlit-App-red.svg)
-![Status](https://img.shields.io/badge/Status-Active-brightgreen.svg)
+An academic tabular-regression project, revisited as an interactive **model explorer**. Compare fictional profiles, inspect the actual trained network’s predictions, and see held-out evaluation alongside simple baselines.
 
----
+**Live demo:** https://mindmetrics-explorer.sanhith-amarathunge.workers.dev
 
-## Project Overview
+**Portfolio:** https://sanhithamarathunge.net/projects#project-mindmetrics
 
-MindMetrics-ML is a machine learning project that predicts an individual's **Quality of Life (QoL)** based on:
+Originally a two-person CSCI 4050U machine learning course project. Primary implementation and showcase polish by **Sanhith Amarathunge**. Original history and notebooks are preserved.
 
-- Mental health indicators (anxiety, depression, stress)
-- Digital behavior patterns (screen time, notifications, social media use)
-- Daily lifestyle factors (sleep quality, physical activity, productivity)
+## What the model demonstrates
 
-Using a fully-connected neural network (MLP), the system learns patterns across 3,500 synthetic participant samples and generates a **QoL/Happiness score**.  
-The trained model is deployed through a **Streamlit web app**, allowing users to interactively input lifestyle factors and receive a personalized prediction.
+The residual PyTorch network uses 15 ordered lifestyle/device/score variables from 3,500 **synthetic** records to predict `happiness_score`. Its committed checkpoint reproduces test MAE **1.637**, RMSE **2.122**, and R² **0.531**, compared with linear regression R² **0.492**.
 
----
+These results describe the synthetic dataset. They do not establish clinical validity, causality, or performance on real people. Read the [model card](docs/MODEL_CARD.md), [release review](docs/REVIEW.md), and [dataset attribution](docs/DATASET.md).
 
-## Problem Statement
+## Reproduce the verified release
 
-The rise of digital technologies has reshaped how individuals work, socialize, sleep, and cope with stress. Understanding how these behaviors influence mental health and overall wellbeing is challenging due to:
+Python **3.13** and Node **22.13+ (22.x)**. Commands below start from the repository root.
 
-- Complex, nonlinear interactions  
-- Multiple overlapping lifestyle factors  
-- Noise and variability in human behavior  
-
-This project solves the problem using **machine learning**, allowing a neural network to automatically discover patterns and estimate QoL from measurable features.
-
----
-
-## Machine Learning Approach
-
-### **Model Type:**  
-Multilayer Perceptron (MLP) regression model using PyTorch.
-
-### **Key Features Used:**
-Examples include:
-
-- `anxiety_score`
-- `depression_score`
-- `stress_level`
-- `sleep_hours`
-- `device_hours_per_day`
-- `social_media_mins`
-- `notifications_per_day`
-- `digital_dependence_score`
-- `productivity_score`
-- …and more
-
-### **Pipeline Summary:**
-1. Data loading + preprocessing  
-2. Train/validation/test split  
-3. Normalization using StandardScaler  
-4. Neural network training with Adam optimizer  
-5. Model evaluation (MAE, RMSE, R²)  
-6. Model + scaler saved for deployment  
-7. Streamlit app loads model → takes user input → outputs QoL prediction  
-
----
-
-# How to Run the Project
-
-### **1️⃣ Clone the repository**
-```bash
-git clone https://github.com/<your-username>/MindMetrics-ML.git
-cd MindMetrics-ML
-```
-### 2️⃣ **Create and activate a virtual environment**
-Windows (PowerShell):
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-
-Mac/Linux:
-python3 -m venv venv
-source venv/bin/activate
-
-### 3️⃣ **Install dependencies**
-```bash 
-pip install -r requirements.txt
+```sh
+python -m venv .venv
+# Windows: .venv\Scripts\Activate.ps1
+# macOS/Linux: source .venv/bin/activate
+python -m pip install --upgrade pip==26.3 setuptools==84.2.1
+python -m pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+python -m pip install -r requirements.txt
+python -m pytest -q
+python -m tools.release
+cd explorer
+npm ci
+npm run build
+npx playwright install chromium
+npm test
+npm run preview
 ```
 
-### 4️⃣ **(Optional) Train the model from scratch**
+Open http://127.0.0.1:8791. `npm run dev` is available for UI iteration after generating model artifacts. Build/preview serve the production CSP and local runtime assets; use those for final verification.
 
-Open:
-```bash 
-notebooks/02_model_training.ipynb
+`requirements.txt` uses the verified transitive pins in `constraints.txt`. CI also audits the installed Python environment and npm packages.
+
+The release command verifies the training-only scaler, reproduces the original split, evaluates the committed weights and baselines, exports ONNX, and generates `explorer/public/release.json` and test fixtures. No retraining is performed. The browser uses the exported network with bundled preprocessing; it makes no inference API calls and keeps inputs in memory.
+
+### Historical notebooks
+
+Install python -m pip install -r requirements-notebooks.txt for notebook visualization and Jupyter tooling. Rerunning training changes the checkpoint; the release evaluation does not train.
+
+### Local Streamlit companion
+
+From the repository root, with the same Python environment:
+
+```sh
+python -m streamlit run project/deployment/app.py --browser.gatherUsageStats=false
 ```
 
-Running the notebook will:
+### Deploy the static explorer
 
-- preprocess the dataset
+After the verified build, from the repository root:
 
-- train the neural network
-
-- evaluate performance
-
-- export the trained model + scaler
-
-Saved files appear in:
-```bash 
-deployment/model/
+```sh
+npx wrangler deploy
 ```
 
-### **5️⃣ Run the Streamlit App**
+Cloudflare serves `explorer/dist`. There is no Python inference server or database. Security headers are generated during build and apply only to this standalone demo. Inputs are not submitted; the host receives normal requests for application/model assets.
 
-From inside the deployment folder:
-```bash 
-python -m streamlit run app.py
-```
+## Layout
 
-If you encounter import errors, ensure your virtual environment is active.
+- `project/mindmetrics/`: shared architecture, ordered feature contract, presets, validated inference.
+- `project/notebooks/`: historical EDA and training notebooks. Rerunning training changes artifacts; the best-checkpoint copy bug is fixed for future runs.
+- `project/deployment/`: corrected Streamlit companion and original checkpoint/scaler.
+- `tools/release.py`: evaluation, export, hashes, plot data, parity gate.
+- `explorer/`: React/TypeScript and ONNX Runtime Web interface.
+- `tests/`: Python checks and synthetic parity fixtures.
 
-This will launch the app at:
-```bash 
-http://localhost:8501
-```
+## Data and acknowledgements
 
-## License
+Dataset: **Tarek Masryo, Digital Lifestyle Benchmark Dataset (2025)**, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Author’s dataset card](https://huggingface.co/datasets/tarekmasryo/digital-lifestyle-benchmark-dataset). The public release includes derived evaluation data and authored fictional scenarios; it does not serve the raw CSV.
 
-This project was developed for academic use as part of a Machine Learning course.
-You are free to modify and extend it.
-
-## Acknowledgements
-
-- Dataset: Digital Lifestyle Benchmark (Kaggle)
-
-- Libraries: PyTorch, Streamlit, scikit-learn, NumPy, Pandas
-
-- Course: CSCI 4050U — Machine Learning
+Built with Python, PyTorch, NumPy, pandas, scikit-learn, Streamlit, ONNX, React, TypeScript, and ONNX Runtime Web. Third-party model-runtime license is included with the deployed assets. The original project README granted permission to modify and extend this academic project; this release preserves that notice and does not replace third-party licenses.
