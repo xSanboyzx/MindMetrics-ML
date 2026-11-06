@@ -115,3 +115,5 @@ setup_release.py
 
 .wrangler/
 
+# Required reproducible release checkpoint
+!project/deployment/model/best_model.pt
